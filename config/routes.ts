@@ -52,8 +52,14 @@ export default [
     component: './TableList',
   },
   {
+    name: '用户列表',
+    icon: 'table',
+    path: '/user/list',
+    component: './UserList',
+  },
+  {
     path: '/',
-    redirect: '/welcome',
+    redirect: '/user/list',
   },
   {
     path: '*',

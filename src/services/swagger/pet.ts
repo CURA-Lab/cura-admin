@@ -2,21 +2,9 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** Update an existing pet PUT /pet */
-export async function updatePet(body: API.Pet, options?: { [key: string]: any }) {
-  return request<any>('/pet', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
-    ...(options || {}),
-  });
-}
-
-/** Add a new pet to the store POST /pet */
-export async function addPet(body: API.Pet, options?: { [key: string]: any }) {
-  return request<any>('/pet', {
+/** 添加pet POST /api/v1/pet/add */
+export async function petControllerAddPet(body: API.AddPetDto, options?: { [key: string]: any }) {
+  return request<any>('/api/v1/pet/add', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -26,128 +14,44 @@ export async function addPet(body: API.Pet, options?: { [key: string]: any }) {
   });
 }
 
-/** Find pet by ID Returns a single pet GET /pet/${param0} */
-export async function getPetById(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getPetByIdParams,
-  options?: { [key: string]: any },
-) {
-  const { petId: param0, ...queryParams } = params;
-  return request<API.Pet>(`/pet/${param0}`, {
-    method: 'GET',
-    params: { ...queryParams },
-    ...(options || {}),
-  });
-}
-
-/** Updates a pet in the store with form data POST /pet/${param0} */
-export async function updatePetWithForm(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updatePetWithFormParams,
-  body: { name?: string; status?: string },
-  options?: { [key: string]: any },
-) {
-  const { petId: param0, ...queryParams } = params;
-  const formData = new FormData();
-
-  Object.keys(body).forEach((ele) => {
-    const item = (body as any)[ele];
-
-    if (item !== undefined && item !== null) {
-      formData.append(
-        ele,
-        typeof item === 'object' && !(item instanceof File) ? JSON.stringify(item) : item,
-      );
-    }
-  });
-
-  return request<any>(`/pet/${param0}`, {
+/** 我的宠物列表 POST /api/v1/pet/mine */
+export async function petControllerMine(body: API.PageBaseDto, options?: { [key: string]: any }) {
+  return request<any>('/api/v1/pet/mine', {
     method: 'POST',
-    params: { ...queryParams },
-    data: formData,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
 
-/** Deletes a pet DELETE /pet/${param0} */
-export async function deletePet(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deletePetParams & {
-    // header
-    api_key?: string;
-  },
+/** remove pet POST /api/v1/pet/remove */
+export async function petControllerRemovePet(
+  body: { petId?: string },
   options?: { [key: string]: any },
 ) {
-  const { petId: param0, ...queryParams } = params;
-  return request<any>(`/pet/${param0}`, {
-    method: 'DELETE',
-    headers: {},
-    params: { ...queryParams },
-    ...(options || {}),
-  });
-}
-
-/** uploads an image POST /pet/${param0}/uploadImage */
-export async function uploadFile(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.uploadFileParams,
-  body: { additionalMetadata?: string; file?: string },
-  file?: File,
-  options?: { [key: string]: any },
-) {
-  const { petId: param0, ...queryParams } = params;
-  const formData = new FormData();
-
-  if (file) {
-    formData.append('file', file);
-  }
-
-  Object.keys(body).forEach((ele) => {
-    const item = (body as any)[ele];
-
-    if (item !== undefined && item !== null) {
-      formData.append(
-        ele,
-        typeof item === 'object' && !(item instanceof File) ? JSON.stringify(item) : item,
-      );
-    }
-  });
-
-  return request<API.ApiResponse>(`/pet/${param0}/uploadImage`, {
+  return request<any>('/api/v1/pet/remove', {
     method: 'POST',
-    params: { ...queryParams },
-    data: formData,
-    requestType: 'form',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
 
-/** Finds Pets by status Multiple status values can be provided with comma separated strings GET /pet/findByStatus */
-export async function findPetsByStatus(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.findPetsByStatusParams,
+/** 每日运动统计 POST /api/v1/pet/stat/daily */
+export async function petControllerStatDaily(
+  body: { petId?: string; start?: string; end?: string },
   options?: { [key: string]: any },
 ) {
-  return request<API.Pet[]>('/pet/findByStatus', {
-    method: 'GET',
-    params: {
-      ...params,
+  return request<any>('/api/v1/pet/stat/daily', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-    ...(options || {}),
-  });
-}
-
-/** Finds Pets by tags Muliple tags can be provided with comma separated strings. Use         tag1, tag2, tag3 for testing. GET /pet/findByTags */
-export async function findPetsByTags(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.findPetsByTagsParams,
-  options?: { [key: string]: any },
-) {
-  return request<API.Pet[]>('/pet/findByTags', {
-    method: 'GET',
-    params: {
-      ...params,
-    },
+    data: body,
     ...(options || {}),
   });
 }

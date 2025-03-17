@@ -2,99 +2,151 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** Create user This can only be done by the logged in user. POST /user */
-export async function createUser(body: API.User, options?: { [key: string]: any }) {
-  return request<any>('/user', {
+/** 绑定地址 POST /api/v1/user/bindWallet */
+export async function userControllerBindWallet(
+  body: API.LoginByWalletDto,
+  options?: { [key: string]: any },
+) {
+  return request<any>('/api/v1/user/bindWallet', {
     method: 'POST',
-    data: body,
-    ...(options || {}),
-  });
-}
-
-/** Get user by user name GET /user/${param0} */
-export async function getUserByName(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getUserByNameParams,
-  options?: { [key: string]: any },
-) {
-  const { username: param0, ...queryParams } = params;
-  return request<API.User>(`/user/${param0}`, {
-    method: 'GET',
-    params: { ...queryParams },
-    ...(options || {}),
-  });
-}
-
-/** Updated user This can only be done by the logged in user. PUT /user/${param0} */
-export async function updateUser(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateUserParams,
-  body: API.User,
-  options?: { [key: string]: any },
-) {
-  const { username: param0, ...queryParams } = params;
-  return request<any>(`/user/${param0}`, {
-    method: 'PUT',
-    params: { ...queryParams },
-    data: body,
-    ...(options || {}),
-  });
-}
-
-/** Delete user This can only be done by the logged in user. DELETE /user/${param0} */
-export async function deleteUser(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteUserParams,
-  options?: { [key: string]: any },
-) {
-  const { username: param0, ...queryParams } = params;
-  return request<any>(`/user/${param0}`, {
-    method: 'DELETE',
-    params: { ...queryParams },
-    ...(options || {}),
-  });
-}
-
-/** Creates list of users with given input array POST /user/createWithArray */
-export async function createUsersWithArrayInput(
-  body: API.User[],
-  options?: { [key: string]: any },
-) {
-  return request<any>('/user/createWithArray', {
-    method: 'POST',
-    data: body,
-    ...(options || {}),
-  });
-}
-
-/** Creates list of users with given input array POST /user/createWithList */
-export async function createUsersWithListInput(body: API.User[], options?: { [key: string]: any }) {
-  return request<any>('/user/createWithList', {
-    method: 'POST',
-    data: body,
-    ...(options || {}),
-  });
-}
-
-/** Logs user into the system GET /user/login */
-export async function loginUser(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.loginUserParams,
-  options?: { [key: string]: any },
-) {
-  return request<string>('/user/login', {
-    method: 'GET',
-    params: {
-      ...params,
+    headers: {
+      'Content-Type': 'application/json',
     },
+    data: body,
     ...(options || {}),
   });
 }
 
-/** Logs out current logged in user session GET /user/logout */
-export async function logoutUser(options?: { [key: string]: any }) {
-  return request<any>('/user/logout', {
-    method: 'GET',
+/** 获取用户详情接口 POST /api/v1/user/getDetail */
+export async function userControllerGetUserDetail(options?: { [key: string]: any }) {
+  return request<API.UserDetail>('/api/v1/user/getDetail', {
+    method: 'POST',
+    ...(options || {}),
+  });
+}
+
+/** 根据邮箱密码登录 POST /api/v1/user/login/email */
+export async function userControllerLoginByEmail(
+  body: API.LoginByEmailDto,
+  options?: { [key: string]: any },
+) {
+  return request<any>('/api/v1/user/login/email', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 校验签名并根据钱包登录 POST /api/v1/user/login/wallet */
+export async function userControllerLoginByWallet(
+  body: API.LoginByWalletDto,
+  options?: { [key: string]: any },
+) {
+  return request<any>('/api/v1/user/login/wallet', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 注册 POST /api/v1/user/register */
+export async function userControllerRegister(
+  body: API.RegisterDto,
+  options?: { [key: string]: any },
+) {
+  return request<any>('/api/v1/user/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 更新用户的名称、头像 POST /api/v1/user/updateUserDetail */
+export async function userControllerUpdateUserDetail(
+  body: API.UpdateUserDto,
+  options?: { [key: string]: any },
+) {
+  return request<any>('/api/v1/user/updateUserDetail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 此处后端没有提供注释 POST /api/v1/user/uploadFile */
+export async function userControllerUploadFile(
+  body: API.FileUploadDto,
+  file?: File,
+  options?: { [key: string]: any },
+) {
+  const formData = new FormData();
+
+  if (file) {
+    formData.append('file', file);
+  }
+
+  Object.keys(body).forEach((ele) => {
+    const item = (body as any)[ele];
+
+    if (item !== undefined && item !== null) {
+      if (typeof item === 'object' && !(item instanceof File)) {
+        if (item instanceof Array) {
+          item.forEach((f) => formData.append(ele, f || ''));
+        } else {
+          formData.append(ele, JSON.stringify(item));
+        }
+      } else {
+        formData.append(ele, item);
+      }
+    }
+  });
+
+  return request<any>('/api/v1/user/uploadFile', {
+    method: 'POST',
+    data: formData,
+    requestType: 'form',
+    ...(options || {}),
+  });
+}
+
+/** 获取邮箱获取验证码 POST /api/v1/user/verifyCode/email */
+export async function userControllerGetRandomCode(
+  body: { email?: string },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/api/v1/user/verifyCode/email', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取钱包获取验证码 POST /api/v1/user/verifyCode/wallet */
+export async function userControllerGenerateVerifyCodeByWallet(
+  body: { wallet?: string },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/api/v1/user/verifyCode/wallet', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
