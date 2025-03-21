@@ -9,6 +9,7 @@ import * as device from './device';
 import * as house from './house';
 import * as location from './location';
 import * as managePet from './managePet';
+import * as manageStat from './manageStat';
 import * as manageUser from './manageUser';
 import * as pet from './pet';
 import * as treasure from './treasure';
@@ -27,4 +28,5 @@ export default {
   device,
   manageUser,
   managePet,
+  manageStat,
 };

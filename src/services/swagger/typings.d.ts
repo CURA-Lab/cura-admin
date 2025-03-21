@@ -124,6 +124,19 @@ declare namespace API {
     avatar: string;
   };
 
+  type IntroduceResponse = {
+    /** 总用户数量 */
+    userCount: number;
+    /** 总宠物数量 */
+    petCount: number;
+    /** 未捡宝箱数量 */
+    treasureCount: number;
+    /** 已捡宝箱数量 */
+    treasureHistoryCount: number;
+    /** 总奖励 */
+    tatalReward: number;
+  };
+
   type LocationCommentListDto = {
     /** 页码 */
     index: number;

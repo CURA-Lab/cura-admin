@@ -62,6 +62,23 @@ export default [
     redirect: '/user/list',
   },
   {
+    path: '/dashboard',
+    name: 'dashboard',
+    icon: 'dashboard',
+    routes: [
+      {
+        path: '/dashboard',
+        redirect: '/dashboard/analysis',
+      },
+      {
+        name: 'analysis',
+        icon: 'smile',
+        path: '/dashboard/analysis',
+        component: './dashboard/analysis',
+      },
+    ],
+  },
+  {
     path: '*',
     layout: false,
     component: './404',
